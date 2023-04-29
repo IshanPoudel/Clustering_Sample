@@ -13,18 +13,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 # from sklearn.model_selection import train_test_split
 
-#Import data
-df= pd.read_csv("ClusteringData.txt" , header=None)
 
-def calculateEuclideanDistance(point1,point2):
-  #x and y are np 
-  squared_distance = ((point1-point2)**2).sum()
-  distance = squared_distance ** 0.5
-  return distance
 
-df.head(2)
-
-from numpy.random.mtrand import random_sample
+#K-means class
 class KMeans:
 
   def __init__(self , K=2 , max_iters=100 ):
@@ -158,20 +149,29 @@ class KMeans:
     plt.title("Iteration: " + str(iteration) + " Number of clusters : " + str(self.K))
     plt.show()
 
+#Global helper fucntion
+def calculateEuclideanDistance(point1,point2):
+  #x and y are np 
+  squared_distance = ((point1-point2)**2).sum()
+  distance = squared_distance ** 0.5
+  return distance
 
 
 
-X = df.iloc[ : , :-1]
-y = df.iloc[: ,-1]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+def KMEANS(dataset , number_of_clusters=2):
+    df= pd.read_csv(dataset , header=None)
 
-k = KMeans(K=2 , max_iters=150 )
-k2=KMeans(K=3 , max_iters=150)
-k3=KMeans(K=4 , max_iters=150 )
+    X = df.iloc[ : , :-1]
+    y = df.iloc[: ,-1]
 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-y_pred = k.predict(X_train)
-k2.predict(X_train)
-k3.predict(X_train)
-print(y_pred)
+    k = KMeans(K=number_of_clusters , max_iters=150 )
+    y_pred = k.predict(X_train)
+    print(y_pred)
+
+    
+KMEANS("ClusteringData.txt" , number_of_clusters=2)
+KMEANS("ClusteringData.txt" , number_of_clusters=3)
+KMEANS("ClusteringData.txt" , number_of_clusters=8)
